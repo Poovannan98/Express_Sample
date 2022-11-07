@@ -98,7 +98,7 @@ console.log("Mongo is connected");
 // app.use -> Intercepts -> applies express.json()
 app.use(express.json());
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 Today express learn");
 });
