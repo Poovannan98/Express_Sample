@@ -12,9 +12,10 @@ const router = express.Router();
 router.get("/", async function (request, response) {
     if(request.query.rating){
       request.query.rating = +request.query.rating;
-    }      
+    }  
+    var name = request.query.name;
     // cursor -> pagination | toArray
-    const movies = await getAllMovies(request);
+    const movies = await getAllMovies(request, name);
     response.send(movies);
 });
   

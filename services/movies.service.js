@@ -7,27 +7,22 @@ export async function updateMovie(id, data) {
     .updateOne({ id: id }, { $set: data });
 }
 export async function deleteMovie(id) {
-  return await client
-    .db("guvi")
-    .collection("movies")
-    .deleteOne({ id: id });
+  return await client.db("guvi").collection("movies").deleteOne({ id: id });
 }
 export async function CreateMovie(data) {
-  return await client
-    .db("guvi").
-    collection("movies")
-    .insertMany(data);
+  return await client.db("guvi").collection("movies").insertMany(data);
 }
 export async function getMoviefromId(id) {
-  return await client
-    .db("guvi")
-    .collection("movies")
-    .findOne({ id: id });
+  return await client.db("guvi").collection("movies").findOne({ id: id });
 }
-export async function getAllMovies(request) {
+export async function getAllMovies(request, name) {
   return await client
     .db("guvi")
     .collection("movies")
-    .find(request.query)
+    .find(
+      name != null
+        ? { name: { $regex: `${name}`, $options: "i" } }
+        : request.query
+    )
     .toArray();
 }

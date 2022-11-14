@@ -1,7 +1,9 @@
 import express from "express"; // import express
 import { MongoClient } from "mongodb";
 import moviesRouter from "./routes/movies.route.js"
+import usersRouter from "./routes/users.route.js"
 import * as dotenv from "dotenv";
+
 dotenv.config();
 
 // console.log(process.env.MONGO_URL);  // env -> environment variables
@@ -23,6 +25,7 @@ app.get("/", function (request, response) {
 });
 
 app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
 

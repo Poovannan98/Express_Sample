@@ -1,0 +1,13 @@
+import jwt from "jsonwebtoken";
+
+// custom middleware -> checks if token is valid
+export const auth = (request, response, next) => {
+    try {
+    const token = request.header("x-auth-token");
+    console.log("token is:", token);
+    jwt.verify(token, process.env.SERECT_KEY)
+    next();
+    } catch (err){
+        response.status(401).send({error : err.message});
+    }
+};
