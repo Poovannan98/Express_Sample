@@ -1,31 +1,27 @@
 import express from "express";
-import {client} from "../index.js";
+import {
+  getAllMovies,
+  getMoviefromId,
+  CreateMovie,
+  deleteMovie,
+  updateMovie,
+} from "../services/movies.service.js";
 
 const router = express.Router();
 
 router.get("/", async function (request, response) {
-
     if(request.query.rating){
       request.query.rating = +request.query.rating;
-    }
-    // console.log(request.query);
-  
+    }      
     // cursor -> pagination | toArray
-    const movies = await client
-      .db("guvi")
-      .collection("movies")
-      .find(request.query)
-      .toArray();
+    const movies = await getAllMovies(request);
     response.send(movies);
 });
   
 router.get("/:id", async function (request, response) {
     const { id } = request.params;
     // db.movies.findOne({id:100})
-    const movie = await client
-      .db("guvi")
-      .collection("movies")
-      .findOne({ id: id });
+    const movie = await getMoviefromId(id);
     // const movie = movies.find((mv) => mv.id === id)
     movie
       ? response.send(movie)
@@ -33,19 +29,15 @@ router.get("/:id", async function (request, response) {
 });
   
 router.post("/create", async function (request, response) {
-    const data = request.body;
-  
-    const result = await client.db("guvi").collection("movies").insertMany(data);
+    const data = request.body;  
+    const result = await CreateMovie(data);
     response.send(result);
 });
   
 router.delete("/:id", async function (request, response) {
     const { id } = request.params;
     // db.movies.deleteOne({id:100})
-    const result = await client
-      .db("guvi")
-      .collection("movies")
-      .deleteOne({ id: id });
+    const result = await deleteMovie(id);
     result.deletedCount > 0
       ? response.send({msg: "Movie was deleted successfully"})
       : response.status(404).send({ msg: "Movie not found" });
@@ -55,11 +47,7 @@ router.put("/:id", async function (request, response) {
     const { id } = request.params;
     const data = request.body;
     // db.movies.updateOne({id:100}, {$set: {rating : 9}})
-    const result = await client
-      .db("guvi")
-      .collection("movies")
-      .updateOne({ id : id }, {$set: data});
-  
+    const result = await updateMovie(id, data);  
     result 
     ? response.send(result)
     : response.status(404).send({msg: "movie not found"})

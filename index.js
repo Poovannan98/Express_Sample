@@ -6,7 +6,6 @@ dotenv.config();
 
 // console.log(process.env.MONGO_URL);  // env -> environment variables
 const app = express(); // call express
-
 // const MONGO_URL = "mongodb://127.0.0.1"; // local database
 const MONGO_URL = process.env.MONGO_URL;  // atlas connect
 const client = new MongoClient(MONGO_URL);
